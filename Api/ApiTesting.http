@@ -1,0 +1,160 @@
+@baseUrl = http://localhost:5000/api
+
+### SECTION 1: USER REGISTRATION & LOGIN
+
+### Register a new user (Admin)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "admin_user",
+  "email": "admin@test.com",
+  "password": "SecurePassword123!"
+}
+
+### Register a new Manager
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "manager_user",
+  "email": "manager@test.com",
+  "password": "SecurePassword123!"
+}
+
+### Register a regular User
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "regular_user",
+  "email": "user@test.com",
+  "password": "SecurePassword123!"
+}
+
+### Login (Admin)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@test.com",
+  "password": "SecurePassword123!"
+}
+
+### Login (Manager)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "manager@test.com",
+  "password": "SecurePassword123!"
+}
+
+### Login (Regular User)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@test.com",
+  "password": "SecurePassword123!"
+}
+
+
+### SECTION 2: TOKEN REFRESH
+
+### Refresh Token (Use the refreshToken from login response)
+POST {{baseUrl}}/auth/refresh?refreshToken=<PASTE_REFRESH_TOKEN_HERE>
+
+
+### SECTION 3: PUBLIC ENDPOINTS
+
+### Public endpoint (No auth required)
+GET {{baseUrl}}/test/public
+
+
+### SECTION 4: AUTHENTICATED ENDPOINTS (Any logged-in user)
+
+### Protected endpoint - Get current user info
+GET {{baseUrl}}/test/me
+Authorization: Bearer <PASTE_ACCESS_TOKEN_HERE>
+
+### Protected endpoint - Generic
+GET {{baseUrl}}/test/protected
+Authorization: Bearer <PASTE_ACCESS_TOKEN_HERE>
+
+
+### SECTION 5: ROLE-BASED ACCESS CONTROL (RBAC)
+
+### Admin only endpoint
+GET {{baseUrl}}/test/admin
+Authorization: Bearer <PASTE_ADMIN_TOKEN_HERE>
+
+### Admin or Manager endpoint
+GET {{baseUrl}}/test/management
+Authorization: Bearer <PASTE_ADMIN_OR_MANAGER_TOKEN_HERE>
+
+### Secure Admin endpoint (Policy-based)
+GET {{baseUrl}}/test/secure-admin
+Authorization: Bearer <PASTE_ADMIN_TOKEN_HERE>
+
+
+### SECTION 6: PERMISSION-BASED ENDPOINTS
+
+### CanRead permission (Admin, Manager, User have this)
+GET {{baseUrl}}/test/read-data
+Authorization: Bearer <PASTE_TOKEN_HERE>
+
+### CanWrite permission (Admin, Manager have this)
+POST {{baseUrl}}/test/write-data
+Authorization: Bearer <PASTE_TOKEN_HERE>
+Content-Type: application/json
+
+{
+  "name": "Test Data",
+  "value": 123
+}
+
+### CanDelete permission (Only Admin has this)
+DELETE {{baseUrl}}/test/delete-data/123
+Authorization: Bearer <PASTE_ADMIN_TOKEN_HERE>
+
+### CanManageUsers permission (Admin, Manager have this)
+GET {{baseUrl}}/test/manage-users
+Authorization: Bearer <PASTE_ADMIN_OR_MANAGER_TOKEN_HERE>
+
+
+### SECTION 7: ERROR SCENARIOS
+
+### Invalid credentials
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@test.com",
+  "password": "WrongPassword"
+}
+
+### User not found
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "nonexistent@test.com",
+  "password": "anypassword"
+}
+
+### Try accessing protected endpoint without token (should fail)
+GET {{baseUrl}}/test/protected
+
+### Try accessing admin endpoint as regular user (should fail with admin token)
+GET {{baseUrl}}/test/admin
+Authorization: Bearer <PASTE_USER_TOKEN_HERE>
+
+### Try accessing write endpoint as user (should fail - user only has read permission)
+POST {{baseUrl}}/test/write-data
+Authorization: Bearer <PASTE_USER_TOKEN_HERE>
+Content-Type: application/json
+
+{
+  "data": "test"
+}
