@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Security - RBAC Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Network<span>Security</span></h1>
+            <p class="subtitle">Secure Role-Based Access Control System</p>
+        </header>
+
+        <main id="main-content">
+            <!-- Auth Section -->
+            <section id="auth-section" class="card glass">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="showTab('login')">Login</button>
+                    <button class="tab-btn" onclick="showTab('register')">Register</button>
+                </div>
+
+                <div id="login-form" class="tab-content">
+                    <h2>Welcome Back</h2>
+                    <form onsubmit="handleLogin(event)">
+                        <div class="input-group">
+                            <label for="login-email">Email</label>
+                            <input type="email" id="login-email" placeholder="admin@test.com" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="login-password">Password</label>
+                            <input type="password" id="login-password" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="primary-btn">Sign In</button>
+                    </form>
+                </div>
+
+                <div id="register-form" class="tab-content hidden">
+                    <h2>Create Account</h2>
+                    <form onsubmit="handleRegister(event)">
+                        <div class="input-group">
+                            <label for="reg-username">Username</label>
+                            <input type="text" id="reg-username" placeholder="johndoe" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="reg-email">Email</label>
+                            <input type="email" id="reg-email" placeholder="john@example.com" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="reg-password">Password</label>
+                            <input type="password" id="reg-password" placeholder="••••••••" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="reg-role">Role</label>
+                            <select id="reg-role" class="glass-select">
+                                <option value="User">User</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="primary-btn">Sign Up</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="hidden">
+                <div class="dashboard-grid">
+                    <aside class="card glass user-info">
+                        <div class="profile-pic">👤</div>
+                        <h2 id="user-display-name">User Name</h2>
+                        <p id="user-display-email">email@example.com</p>
+                        <div class="roles-container" id="roles-list">
+                            <!-- Roles will be injected here -->
+                        </div>
+                        <button class="secondary-btn logout-btn" onclick="handleLogout()">Logout</button>
+                    </aside>
+
+                    <div class="main-dashboard">
+                        <div class="card glass permissions-card">
+                            <h3>My Permissions</h3>
+                            <div class="permissions-grid" id="permissions-list">
+                                <!-- Permissions will be injected here -->
+                            </div>
+                        </div>
+
+                        <div class="card glass actions-card">
+                            <h3>System Actions</h3>
+                            <div class="action-buttons">
+                                <button onclick="testEndpoint('public')" class="action-btn public">Public Data</button>
+                                <button onclick="testEndpoint('protected')" class="action-btn protected">Protected Info</button>
+                                <button onclick="testEndpoint('admin')" class="action-btn admin">Admin Portal</button>
+                                <button onclick="testEndpoint('management')" class="action-btn manager">Management</button>
+                            </div>
+                            <div id="api-response" class="response-box">
+                                <p class="placeholder">Response from API will appear here...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Network Security Implementation. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
