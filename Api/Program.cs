@@ -50,7 +50,6 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ManagerOnly", policy =>
         policy.RequireRole("Manager"));
 
-    // 🔥 ADD PERMISSION-BASED POLICIES
     options.AddPolicy("CanRead", policy =>
         policy.RequireClaim("permission", "read"));
 
@@ -71,7 +70,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// 🔥 GLOBAL EXCEPTION HANDLING MIDDLEWARE
 app.UseExceptionHandler((appBuilder) =>
 {
     appBuilder.Run(async context =>

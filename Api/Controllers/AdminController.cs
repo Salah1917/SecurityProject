@@ -21,9 +21,7 @@ public class AdminController : ControllerBase
         _userRepository = userRepository;
     }
 
-    /// <summary>
-    /// Assign a role to a user (Admin only)
-    /// </summary>
+    // Assign a role to a user (Admin only)
     [HttpPost("assign-role")]
     public async Task<IActionResult> AssignRoleToUser([FromBody] AssignRoleRequest request)
     {
@@ -56,9 +54,7 @@ public class AdminController : ControllerBase
         return Ok(new { message = $"Role '{role.Name}' assigned to user '{user.Username}'" });
     }
 
-    /// <summary>
-    /// Remove a role from a user (Admin only)
-    /// </summary>
+    // Remove a role from a user (Admin only)
     [HttpPost("remove-role")]
     public async Task<IActionResult> RemoveRoleFromUser([FromBody] AssignRoleRequest request)
     {
@@ -74,9 +70,7 @@ public class AdminController : ControllerBase
         return Ok(new { message = "Role removed from user" });
     }
 
-    /// <summary>
-    /// Get all users with their roles
-    /// </summary>
+    // Get all users with their roles
     [HttpGet("users")]
     public async Task<IActionResult> GetAllUsers()
     {
@@ -95,9 +89,7 @@ public class AdminController : ControllerBase
         return Ok(users);
     }
 
-    /// <summary>
-    /// Get all roles
-    /// </summary>
+    // Get all roles
     [HttpGet("roles")]
     public async Task<IActionResult> GetAllRoles()
     {
@@ -113,9 +105,7 @@ public class AdminController : ControllerBase
         return Ok(roles);
     }
 
-    /// <summary>
-    /// Get all permissions
-    /// </summary>
+    // Get all permissions
     [HttpGet("permissions")]
     public async Task<IActionResult> GetAllPermissions()
     {

@@ -23,7 +23,6 @@ public class TestController : ControllerBase
         return Ok(new { message = "You are authenticated", userId, email });
     }
 
-    // 🔥 ONLY ADMIN CAN ACCESS
     [Authorize(Roles = "Admin")]
     [HttpGet("admin")]
     public IActionResult AdminOnly()
@@ -31,7 +30,6 @@ public class TestController : ControllerBase
         return Ok("Hello Admin 👑");
     }
 
-    // 🔥 MULTIPLE ROLES
     [Authorize(Roles = "Admin,Manager")]
     [HttpGet("management")]
     public IActionResult Management()
@@ -46,7 +44,6 @@ public class TestController : ControllerBase
         return Ok("Policy-based Admin access");
     }
 
-    // 🔥 PERMISSION-BASED ENDPOINTS
     [Authorize(Policy = "CanRead")]
     [HttpGet("read-data")]
     public IActionResult ReadData()
@@ -75,7 +72,6 @@ public class TestController : ControllerBase
         return Ok(new { message = "You can manage users", users = "List of users" });
     }
 
-    // 🔥 GET CURRENT USER INFO
     [Authorize]
     [HttpGet("me")]
     public IActionResult GetCurrentUser()

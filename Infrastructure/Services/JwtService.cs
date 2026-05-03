@@ -27,10 +27,8 @@ public class JwtService : IJwtService
 
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        // 🔥 LOAD roles from DB (IMPORTANT)
         var roles = user.UserRoles?.Select(ur => ur.Role.Name).ToList() ?? new List<string>();
 
-        // 🔥 LOAD permissions from DB
         var permissions = user.UserRoles?
             .SelectMany(ur => ur.Role.RolePermissions)
             .Select(rp => rp.Permission.Name)
@@ -44,13 +42,11 @@ public class JwtService : IJwtService
         new Claim("username", user.Username)
     };
 
-        // 🔥 ADD ROLE CLAIMS
         foreach (var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
-        // 🔥 ADD PERMISSION CLAIMS
         foreach (var permission in permissions)
         {
             claims.Add(new Claim("permission", permission));
