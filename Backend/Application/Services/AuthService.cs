@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Application.DTOs;
@@ -41,10 +41,11 @@ public class AuthService : IAuthService
         await _userRepository.AddAsync(user);
         await _userRepository.SaveChangesAsync();
 
-        var userRole = await _userRepository.GetRoleByNameAsync("User");
+        var roleName = string.IsNullOrWhiteSpace(dto.Role) ? "User" : dto.Role;
+        var userRole = await _userRepository.GetRoleByNameAsync(roleName);
 
         if (userRole == null)
-            throw new InvalidOperationException("Default 'User' role not found in database. Please ensure roles are seeded.");
+            throw new InvalidOperationException($"Role '{roleName}' not found in database. Please ensure roles are seeded.");
 
         await _userRepository.AddUserRoleAsync(user.Id, userRole.Id);
 
