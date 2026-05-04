@@ -13,9 +13,7 @@ services:
       retries: 10
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: sirlight35/my-networksecurity-app:v1
     ports:
       - "5000:8080"
     environment:

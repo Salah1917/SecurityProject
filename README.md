@@ -20,6 +20,17 @@ This project is fully containerized. You only need Docker Desktop installed to r
     docker-compose up --build
     ```
 
+## 🌍 Sharing with Others (No Source Code Needed)
+
+If you want to share this project with someone without sending them all the source code, you can just send them the `docker-compose.yml` file:
+
+1.  **Send them `docker-compose.yml`**.
+2.  They put it in a folder and run:
+    ```powershell
+    docker-compose up
+    ```
+3.  Docker will automatically pull the pre-built image from **Docker Hub** (`sirlight35/my-networksecurity-app:v1`).
+
 ### Accessing the App
 *   **Frontend**: `http://localhost:5000`
 *   **Swagger API Documentation**: `http://localhost:5000/swagger`
