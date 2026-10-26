@@ -1,99 +1,84 @@
-# Network Security — Role-Based Access Control (RBAC) System
-
-A modern **Role-Based Access Control (RBAC)** implementation built with a **.NET 10** backend, **Vanilla JavaScript** frontend, and **Microsoft SQL Server**, fully containerized using Docker.
-
+# Network Security — RBAC System
+ 
+A modern **Role-Based Access Control (RBAC)** system built with a .NET 10 backend, Vanilla JavaScript frontend, and SQL Server — fully containerized with Docker.
+ 
 ---
-
-## Architecture Overview
-
-```
-SecurityProject/
-├── Backend/              # .NET 10 Web API (Clean Architecture: Domain, App, Infra, Api)
-├── Frontend/             # Vanilla JavaScript client (Glassmorphism UI)
-├── Dockerfile            # Multi-stage production container build
-└── docker-compose.yml    # Service orchestration (App + SQL Server)
-```
-
----
-
+ 
 ## Prerequisites
-
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (v20.10+ recommended) installed and running.
-
+ 
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
 ---
-
-## Getting Started
-
-### Option 1: Run with Source Code (Local Build)
-
-Clone the repository and build the containers locally:
-
-```bash
-# Navigate to project directory
+ 
+## Quick Start
+ 
+```powershell
 cd SecurityProject
-
-# Build and start services in the foreground
 docker-compose up --build
 ```
-
-### Option 2: Run Without Source Code (Docker Hub)
-
-To distribute or run without cloning the full repository, share only `docker-compose.yml`. Docker pulls the pre-built image (`sirlight35/my-networksecurity-app:v1`) directly from Docker Hub:
-
-```bash
+ 
+Once running, open your browser:
+ 
+| Service | URL |
+| :--- | :--- |
+| Frontend | `http://localhost:5000` |
+| Swagger API Docs | `http://localhost:5000/swagger` |
+ 
+---
+ 
+## Sharing Without Source Code
+ 
+Just send someone the `docker-compose.yml` file. They can run the full stack without any source code — Docker will pull the pre-built image from Docker Hub (`sirlight35/my-networksecurity-app:v1`) automatically.
+ 
+```powershell
 docker-compose up
 ```
-
+ 
 ---
-
-## Service Endpoints
-
-Once the containers are up and healthy, access the services:
-
-| Service | URL | Notes |
-| :--- | :--- | :--- |
-| **Frontend Dashboard** | `http://localhost:5000` | UI with interactive RBAC demo |
-| **Swagger API Docs** | `http://localhost:5000/swagger` | Interactive OpenAPI documentation |
-| **SQL Server** | `localhost:1433` | Companion database instance |
-
+ 
+## Features
+ 
+- **Unified Container** — A single Docker image serves both the .NET API and the static frontend.
+- **Automated Database** — SQL Server runs in a companion container with automatic migrations and seeding.
+- **JWT Authentication** — Secure token-based auth with Access and Refresh tokens.
+- **Dynamic RBAC** — Choose your role at registration and see permissions update in real time.
+- **Transient Resiliency** — Backend waits for the database and retries connections automatically.
 ---
-
-## Core Features
-
-- **Single Container Deployment** — Hosts the .NET Web API and serves static frontend assets from one container.
-- **Automated DB Migrations** — SQL Server spins up with automatic schema creation, migrations, and initial seed data.
-- **JWT Authentication** — Stateless token authentication featuring short-lived Access Tokens paired with Refresh Tokens.
-- **Granular RBAC** — Role assignment at registration with dynamic permission resolution on protected routes.
-- **Transient Fault Handling** — Built-in retry policies and health checks ensuring the API waits until the database is ready.
-
+ 
+## Roles & Permissions
+ 
+| Role | Permissions |
+| :--- | :--- |
+| **Admin** | `read`, `write`, `delete`, `manage_users` |
+| **Manager** | `read`, `write` |
+| **User** | `read` |
+ 
 ---
-
-## Roles & Access Matrix
-
-| Role | Permissions | Available Actions |
-| :--- | :--- | :--- |
-| **Admin** | `read`, `write`, `delete`, `manage_users` | Full system access, User Management, Admin Portal |
-| **Manager** | `read`, `write` | Create and modify records; no user deletion or administration |
-| **User** | `read` | Read-only access across standard endpoints |
-
+ 
+## Project Structure
+ 
+```
+SecurityProject/
+├── Backend/          # .NET 10 Web API — Clean Architecture (Domain, Application, Infrastructure, Api)
+├── Frontend/         # Vanilla JS frontend with Glassmorphism UI
+├── Dockerfile        # Multi-stage production build
+└── docker-compose.yml
+```
+ 
 ---
-
-## Verification & Testing Guide
-
-1. **Register** — Create an account via the frontend and select an initial role (e.g., `User` or `Manager`).
-2. **Authenticate** — Log in to receive your JWT token pair.
-3. **Inspect Permissions** — View active permissions displayed on the user dashboard.
-4. **Test Authorization Boundaries**:
-   - Access **General Read** endpoints (allowed for all roles).
-   - Trigger **Admin Portal** or **User Deletion** while logged in as `User` or `Manager` $\rightarrow$ verifies `403 Forbidden`.
-   - Log in as `Admin` $\rightarrow$ verifies `200 OK` across all system actions.
-
+ 
+## Testing the System
+ 
+1. **Register** — Create an account and pick a role (e.g., Manager).
+2. **Login** — Sign in with your credentials.
+3. **Dashboard** — View your permissions and try the System Actions buttons.
+   - A **User** hitting "Admin Portal" will receive `403 Forbidden`.
+   - An **Admin** can call all actions successfully.
 ---
-
+ 
 ## Troubleshooting
-
-| Issue | Root Cause | Resolution |
-| :--- | :--- | :--- |
-| `Cannot connect to the Docker daemon` | Docker service is stopped | Start Docker Desktop and verify the daemon is running before executing commands. |
-| `SqlException / Connection Refused` | First-boot DB init latency | SQL Server initialization can take 15–30s on cold starts. Let the container health check cycle or run `docker-compose down && docker-compose up`. |
-| `Bind for 0.0.0.0:5000 failed` | Port `5000` or `1433` is occupied | Change the host port mapping in `docker-compose.yml` (e.g., `"5050:5000"`). |
+ 
+| Issue | Fix |
+| :--- | :--- |
+| Docker daemon error | Make sure Docker Desktop is running before executing any `docker-compose` command. |
+| Database not ready on first run | The app uses health checks to wait for SQL Server. If it fails, re-run `docker-compose up`. |
+| Port conflict on `5000` or `1433` | Edit the port mappings in `docker-compose.yml`. |
